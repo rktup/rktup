@@ -25,6 +25,7 @@
 <body>
 
   <div class="container">
+    <div class="text-center">
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -92,17 +93,58 @@
      transform="translate(-48.318092,-5.4321768)" /><g
      id="g3794"
      transform="translate(-48.318092,-5.4321768)" /></svg>
+    </div>
 
-    <h1>rktup</h1>
-    <h2>easy rkt aci discovery</h2>
+    <h1 class="text-center">rktup</h1>
+
+    <h2>Easy rkt ACI discovery</h2>
 
     <p>rkt's <a href="https://github.com/appc/spec/blob/master/spec/discovery.md">App Container Image (ACI) Discovery</a>
     locates image and signature URLs using HTTPS+HTML. <code>rktup.org</code> can
     be used to easily configure image and signature URLs from repositories
     on GitHub.
     </p>
+
+    <h3>Usage</h3>
+
+    <p>Place a file <code>.rktup.json</code> with the following structure in
+    the root of your GitHub repository or any subfolder. <code>pubkey</code>
+    is optional.</p>
+
+    <h4>Example</h4>
+
+    <pre><code>
+    {
+      "discovery": {
+        "url_template": "https://sos.exo.io/my-acis/my-project-{version}-{os}-{arch}.{ext}"
+      },
+      "pubkey": {
+        "url": "https://sos.exo.io/my-acis/signing-key.asc
+      }
+    }
+    </code></pre>
+
+    <p>Use rkt to fetch or run your image, for example:</p>
+
+    <pre><code>
+    rkt run --interactive rktup.org/my-user/my-project
+    </code></pre>
+
+    <h3>Caveats</h3>
+
+    <p>rkt verifies the app name on download, i.e. the name must be set
+    to the rktup name or <code>--insecure-options=image</code> must be used.
+    <code>rkt image list</code> does show the image by its
+    name as set in the <a href="https://github.com/appc/spec/blob/master/spec/aci.md#image-manifest-schema">image manifest</a>.</p>
+
+    <h3>GitHub</h3>
+
+    <p><a href="https://github.com/rktup/rktup">https://github.com/rktup/rktup</a></p>
+
+    <p class="text-center"><small>Version: {{ .Version }}</small></p>
+    <p class="text-center"><small>Built and maintained by <a href="https://www.schu.io">Michael Schubert</a></small></p>
+
   </div>
 
 </body>
 </html>
-

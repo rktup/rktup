@@ -50,7 +50,12 @@ func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.URL.Path == "" || r.URL.Path == "/" || r.URL.Path == "/index.html" {
-		templateIndex.Execute(w, nil)
+		data := struct {
+			Version string
+		}{
+			Version,
+		}
+		templateIndex.Execute(w, data)
 	} else {
 		http.Error(w, "Not found", http.StatusNotFound)
 	}
