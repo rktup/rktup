@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head>
+  <title>rktup</title>
+  <meta name="ac-discovery" content="{{ .Prefix }} {{ .Template }}">
+  {{- if .Pubkey }}
+  <meta name="ac-discovery-pubkeys" content="{{ .Prefix }} {{ .Pubkey }}">
+  {{- end }}
+</head>
+<body>
+</body>
+</html>
