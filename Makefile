@@ -2,9 +2,13 @@ version="$(shell git describe --tags --always --dirty)"
 
 .PHONY: all build
 
-all: build
+all: build templates.go
 
-build:
+templates.go:
+	go-bindata -pkg rktup -o templates.go \
+		index.html ac-discovery.html
+
+build: templates.go
 	go build \
 		-ldflags "-X github.com/schu/rktup.Version=$(version)" \
 		-o bin/rktup cli/main.go

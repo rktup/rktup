@@ -35,8 +35,11 @@ func middleware(next http.Handler) http.Handler {
 	})
 }
 
-func NewServer(config *ServerConfig) *Server {
-	handler := NewHTTPHandler(config.Hostname, config.GithubToken)
+func NewServer(config *ServerConfig) (*Server, error) {
+	handler, err := NewHTTPHandler(config.Hostname, config.GithubToken)
+	if err != nil {
+		return nil, err
+	}
 	httpServer := &http.Server{
 		Addr:    config.Addr,
 		Handler: middleware(handler),
@@ -44,7 +47,7 @@ func NewServer(config *ServerConfig) *Server {
 	return &Server{
 		config:     config,
 		httpServer: httpServer,
-	}
+	}, nil
 }
 
 func (s *Server) ListenAndServe() error {

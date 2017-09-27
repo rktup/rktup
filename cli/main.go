@@ -27,17 +27,20 @@ func init() {
 func main() {
 	flag.Parse()
 
-	server := rktup.NewServer(&rktup.ServerConfig{
+	server, err := rktup.NewServer(&rktup.ServerConfig{
 		Addr:        addr,
 		Hostname:    hostname,
 		GithubToken: githubToken,
 	})
+	if err != nil {
+		log.Fatalf("failed to get server: %v\n", err)
+	}
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, os.Kill)
 
 	go func() {
-		log.Printf("listening on %s", addr)
+		log.Printf("listening on %s\n", addr)
 		if err := server.ListenAndServe(); err != nil {
 			if err != http.ErrServerClosed {
 				log.Fatalf("http server error: %v\n", err)

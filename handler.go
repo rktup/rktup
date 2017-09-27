@@ -27,17 +27,35 @@ type Manifest struct {
 type HTTPHandler struct {
 	hostname    string
 	githubToken string
+
+	tmplIndex     *template.Template
+	tmplDiscovery *template.Template
 }
 
-func NewHTTPHandler(hostname, githubToken string) *HTTPHandler {
+func NewHTTPHandler(hostname, githubToken string) (*HTTPHandler, error) {
+	dataTmplIndex, err := Asset("index.html")
+	if err != nil {
+		return nil, err
+	}
+	dataTmplDiscovery, err := Asset("ac-discovery.html")
+	if err != nil {
+		return nil, err
+	}
+	tmplIndex, err := template.New("index.html").Parse(string(dataTmplIndex))
+	if err != nil {
+		return nil, err
+	}
+	tmplDiscovery, err := template.New("index.html").Parse(string(dataTmplDiscovery))
+	if err != nil {
+		return nil, err
+	}
 	return &HTTPHandler{
 		hostname,
 		githubToken,
-	}
+		tmplIndex,
+		tmplDiscovery,
+	}, nil
 }
-
-var templateIndex = template.Must(template.ParseFiles("index.html"))
-var templateDiscovery = template.Must(template.ParseFiles("ac-discovery.html"))
 
 func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
@@ -55,7 +73,7 @@ func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}{
 			Version,
 		}
-		templateIndex.Execute(w, data)
+		h.tmplIndex.Execute(w, data)
 	} else {
 		http.Error(w, "Not found", http.StatusNotFound)
 	}
@@ -129,7 +147,7 @@ func (h *HTTPHandler) discovery(w http.ResponseWriter, r *http.Request) {
 		manifest.Discovery.URLTemplate,
 		manifest.Pubkey.URL,
 	}
-	templateDiscovery.Execute(w, discovery)
+	h.tmplDiscovery.Execute(w, discovery)
 }
 
 func splitPath(fullPath string) (owner string, repo string, subPath string, err error) {
