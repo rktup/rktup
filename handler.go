@@ -45,7 +45,7 @@ func NewHTTPHandler(hostname, githubToken string) (*HTTPHandler, error) {
 	if err != nil {
 		return nil, err
 	}
-	tmplDiscovery, err := template.New("index.html").Parse(string(dataTmplDiscovery))
+	tmplDiscovery, err := template.New("ac-discovery.html").Parse(string(dataTmplDiscovery))
 	if err != nil {
 		return nil, err
 	}
