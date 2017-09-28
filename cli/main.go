@@ -9,7 +9,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/schu/rktup"
+	"github.com/rktup/rktup"
 )
 
 var (

@@ -10,5 +10,5 @@ templates.go:
 
 build: templates.go
 	go build \
-		-ldflags "-X github.com/schu/rktup.Version=$(version)" \
+		-ldflags "-X github.com/rktup/rktup.Version=$(version)" \
 		-o bin/rktup cli/main.go
